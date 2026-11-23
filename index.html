@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Remix Pelican Campus Quest</title>
+  <meta name="description" content="Mountain View Open-World 3D Car Game powered by PlayCanvas: drive custom .glb cars offline on Android and web." />
+  <meta property="og:title" content="Remix Pelican Campus Quest" />
+  <meta property="og:description" content="Mountain View Open-World 3D Car Game powered by PlayCanvas: drive custom .glb cars offline on Android and web." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B0F17'/%3E%3Cpath d='M14 40 L20 24 H44 L50 40 Z' fill='%23F59E0B'/%3E%3Ccircle cx='22' cy='42' r='6' fill='%23E2E8F0'/%3E%3Ccircle cx='42' cy='42' r='6' fill='%23E2E8F0'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <canvas id="game-canvas" aria-label="PlayCanvas 3D Open-World Car Driving Game"></canvas>
+
+  <!-- Lightweight Preloader -->
+  <div id="preloader" class="preloader" role="status" aria-live="polite">
+    <div class="preloader-box">
+      <div class="preloader-title">Campus Cars 3D</div>
+      <div id="preloader-status" class="preloader-status">Initializing PlayCanvas…</div>
+      <div class="preloader-track">
+        <div id="preloader-fill" class="preloader-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WebGL Context Loss Fallback -->
+  <div id="context-lost" class="context-lost hidden">
+    <div class="preloader-box">
+      <div class="preloader-title">3D Graphics Paused</div>
+      <div class="preloader-status">WebGL context was reset by the device.</div>
+      <button id="btn-reload-gl" type="button" class="hud-btn primary" style="margin-top:16px">Reload Game</button>
+    </div>
+  </div>
+
+  <!-- Clean Racing HUD -->
+  <div class="hud">
+    <header class="hud-top">
+      <div class="hud-status">
+        <div id="hud-car-name" class="hud-car-name">Loading…</div>
+        <div class="hud-meta-line">
+          <span>Rings <strong id="hud-checkpoints">0 / 12</strong></span>
+        </div>
+      </div>
+
+      <div class="hud-actions">
+        <button id="btn-garage" type="button" class="hud-btn primary">Garage</button>
+        <button id="btn-camera" type="button" class="hud-btn">Chase</button>
+        <button id="btn-time" type="button" class="hud-btn">Day</button>
+        <button id="btn-sound" type="button" class="hud-btn">Sound</button>
+        <button id="btn-reset" type="button" class="hud-btn">Reset</button>
+      </div>
+    </header>
+
+    <footer class="hud-bottom">
+      <!-- Left Multi-Touch Steering -->
+      <div class="steer-pad" aria-label="Steering Controls">
+        <button id="touch-left" type="button" class="touch-key" aria-label="Steer Left">◀</button>
+        <button id="touch-right" type="button" class="touch-key" aria-label="Steer Right">▶</button>
+      </div>
+
+      <!-- Right Speedometer & Pedals -->
+      <div class="drive-cluster">
+        <div class="speedo" aria-label="Speedometer">
+          <div class="speedo-top">
+            <div><span id="speed-val" class="speedo-val">0</span><span class="speedo-unit">KM/H</span></div>
+            <div id="speed-gear" class="speedo-gear">P</div>
+          </div>
+          <div class="rpm-track"><div id="rpm-fill" class="rpm-fill"></div></div>
+          <div class="nitro-track"><div id="nitro-fill" class="nitro-fill"></div></div>
+        </div>
+
+        <div class="pedals-aux">
+          <button id="touch-horn" type="button" class="aux-btn">HORN</button>
+          <button id="touch-drift" type="button" class="aux-btn">DRIFT</button>
+          <button id="touch-nitro" type="button" class="aux-btn">NITRO</button>
+        </div>
+
+        <div class="pedals-main">
+          <button id="touch-brake" type="button" class="pedal-brake">BRAKE</button>
+          <button id="touch-gas" type="button" class="pedal-gas">GAS</button>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Garage Drawer -->
+  <div id="garage-backdrop" class="garage-backdrop hidden" role="dialog" aria-label="Car Garage">
+    <aside class="garage-drawer">
+      <div class="garage-header">
+        <div class="garage-title">Garage</div>
+        <button id="garage-close" type="button" class="garage-close" aria-label="Close Garage">×</button>
+      </div>
+      <div id="garage-list" class="garage-list"></div>
+      <div class="garage-import">
+        <button id="btn-import-glb" type="button" class="import-btn">+ Load local .glb car</button>
+        <input id="file-input-glb" type="file" accept=".glb" hidden />
+        <p class="garage-hint">
+          Add any .glb file to the <strong>models/</strong> folder in GitHub — GitHub Actions automatically bundles it into your PlayCanvas Android APK.
+        </p>
+      </div>
+    </aside>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
